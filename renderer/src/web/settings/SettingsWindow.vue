@@ -19,7 +19,7 @@
   <div :class="$style.window" class="grow layout-column" :onMouseenter="hidePodium">
     <AppTitleBar @close="cancel" :title="t('settings.title')" />
     <div class="flex grow min-h-0">
-      <div class="pl-2 pt-2 bg-gray-900 flex flex-col gap-1" style="min-width: 10rem;">
+      <div class="pl-2 pt-2 bg-gray-900 flex flex-col gap-1 shrink-0" style="min-width: 10rem;">
         <template v-for="item of menuItems">
           <button v-if="item.type === 'menu-item'"
             @click="item.select" :class="[$style['menu-item'], { [$style['active']]: item.isSelected }]">{{ item.name }}</button>
@@ -33,7 +33,7 @@
           {{ t('Support development on') }}<br> <a href="https://patreon.com/awakened_poe_trade" class="inline-flex mt-1" target="_blank"><img class="inline h-5" src="/images/Patreon.svg"></a>
         </div>
       </div>
-      <div class="text-gray-100 grow layout-column bg-gray-900">
+      <div class="text-gray-100 grow min-w-0 layout-column bg-gray-900">
         <div class="grow overflow-y-auto bg-gray-800 rounded-tl">
           <component v-if="configClone"
             :is="selectedComponent" :config="configClone" :configWidget="configWidget" />
