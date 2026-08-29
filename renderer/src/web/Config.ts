@@ -7,6 +7,7 @@ import type { StashSearchWidget } from './stash-search/widget'
 import type { ItemCheckWidget } from './item-check/widget'
 import type { ItemSearchWidget } from './item-search/widget'
 import { registry as widgetRegistry } from './overlay/widget-registry.js'
+import { defaultMapRegexConfig } from './map-check/map-regex.js'
 
 const _config = shallowRef<Config | null>(null)
 let _lastSavedConfig: Config | null = null
@@ -123,7 +124,7 @@ export interface Config {
 }
 
 export const defaultConfig = (): Config => ({
-  configVersion: 18,
+  configVersion: 19,
   overlayKey: 'Shift + Space',
   overlayBackground: 'rgba(129, 139, 149, 0.15)',
   overlayBackgroundClose: true,
@@ -431,6 +432,13 @@ function upgradeConfig (_config: Config): Config {
     config.useIntlSite = (config.language === 'cmn-Hant' && config.realm === 'pc-ggg')
 
     config.configVersion = 18
+  }
+
+  if (config.configVersion < 19) {
+    const itemCheck = config.widgets.find(w => w.wmType === 'item-check')!
+    itemCheck.maps.regex ??= defaultMapRegexConfig()
+
+    config.configVersion = 19
   }
   /* eslint-enable */
 

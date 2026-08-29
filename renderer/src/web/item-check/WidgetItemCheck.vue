@@ -10,6 +10,7 @@
 </template>
 
 <script lang="ts">
+import { defaultMapRegexConfig } from '../map-check/map-regex.js'
 import type { WidgetSpec } from '../overlay/interfaces'
 import type { ItemCheckWidget } from './widget.js'
 
@@ -38,7 +39,8 @@ export default {
             { matcher: 'Monsters reflect #% of Physical Damage', decision: 'd--' },
             { matcher: 'Monsters reflect #% of Elemental Damage', decision: 'd--' },
             { matcher: 'Area contains two Unique Bosses', decision: 'g--' }
-          ]
+          ],
+          regex: defaultMapRegexConfig()
         }
       }
     }

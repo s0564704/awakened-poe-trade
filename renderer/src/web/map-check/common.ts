@@ -1,9 +1,11 @@
 import { STAT_BY_MATCH_STR_V2 } from '@/assets/data'
+import type { MapRegexConfig } from './map-regex.js'
 
 export interface MapCheckConfig {
   profile: number
   showNewStats: boolean
   selectedStats: MapCheckStat[]
+  regex: MapRegexConfig
 }
 
 export interface MapCheckStat {

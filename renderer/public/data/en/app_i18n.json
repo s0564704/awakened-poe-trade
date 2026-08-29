@@ -291,7 +291,22 @@
     "profile": "Profile",
     "search_selected": "Only selected",
     "search_stat_col": "Stat (found: {0})",
-    "new_mods_icon": "Show icon for new mods"
+    "new_mods_icon": "Show icon for new mods",
+    "regex": {
+      "title": "Stash tab search",
+      "exclude": "Exclude",
+      "require": "Require",
+      "min_quantity": "Quantity",
+      "min_rarity": "Rarity",
+      "min_pack_size": "Pack size",
+      "min_quality": "Quality",
+      "extra": "Extra terms",
+      "copy": "Copy",
+      "copied": "Copied",
+      "search": "Search stash",
+      "dropped": "{0} mod(s) left out, the search field is full. Remove some mods or a threshold.",
+      "ambiguous": "{0} mod(s) cannot be told apart from a similar mod, so the search will also match that one."
+    }
   },
   "trade_result": {
     "error" :"Trade site request failed",

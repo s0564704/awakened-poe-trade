@@ -26,41 +26,17 @@
         :selected-stats="selectedStats"
         :profile="profile" />
     </VirtualScroll>
+    <MapRegexGenerator :maps="widget.maps" class="overflow-y-auto"
+      style="max-height: 45%;" />
   </div>
 </template>
 
 <script lang="ts">
-import { STATS_ITERATOR } from '@/assets/data'
 import { StatMatcher, StatTag, decisionHasColor, isOutdated } from './common.js'
+import { findAllAreaMods } from './map-regex.js'
 
 export default {
   name: 'map_check.name'
-}
-
-function tagToShowOrder (tag?: StatTag): number {
-  switch (tag) {
-    case StatTag.UberMapExclusive: return 1
-    case StatTag.HeistExclusive: return 2
-  }
-  return 0
-}
-
-function findAllAreaMods (): StatMatcher[] {
-  const out: StatMatcher[] = []
-  for (const stat of STATS_ITERATOR('AreaMods')) {
-    if (!stat.fromAreaMods) continue
-
-    const tag = (stat.fromAreaMods === 'heist_exclusive') ? StatTag.HeistExclusive
-      : (stat.fromAreaMods === 'ubermap_exclusive') ? StatTag.UberMapExclusive : undefined
-
-    for (const c of stat.matchers) {
-      out.push({ matchStr: c.string, tag })
-    }
-  }
-  out.sort((a, b) =>
-    (tagToShowOrder(a.tag) - tagToShowOrder(b.tag)) ||
-    a.matchStr.localeCompare(b.matchStr))
-  return out
 }
 </script>
 
@@ -73,6 +49,7 @@ import type { ItemCheckWidget } from '../item-check/widget.js'
 import UiToggle from '@/web/ui/UiToggle.vue'
 import VirtualScroll from '@/web/ui/VirtualScroll.vue'
 import SettingsMatcherEntry from './SettingsMatcherEntry.vue'
+import MapRegexGenerator from './MapRegexGenerator.vue'
 
 const props = defineProps(configProp())
 
