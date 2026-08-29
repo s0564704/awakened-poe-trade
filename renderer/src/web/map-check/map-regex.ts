@@ -1,36 +1,15 @@
 import { CLIENT_STRINGS as _$, ITEMS_ITERATOR, STATS_ITERATOR } from '@/assets/data'
 import { ItemCategory } from '@/parser/meta'
-import { type MapCheckStat, StatTag, type StatMatcher, decisionHasColor } from './common.js'
+import {
+  type MapCheckStat, type MapRegexConfig, StatTag, type StatMatcher,
+  decisionAt, decisionHasColor
+} from './common.js'
 
 // The in-game search field accepts at most this many characters.
 export const SEARCH_LENGTH_LIMIT = 250
 
 const MIN_TOKEN_LENGTH = 3
 const ROLL_PLACEHOLDER = '#'
-
-export interface MapRegexConfig {
-  excludeDeadly: boolean
-  excludeWarning: boolean
-  requireGood: boolean
-  minQuantity: number | null
-  minRarity: number | null
-  minPackSize: number | null
-  minQuality: number | null
-  extraTerms: string
-}
-
-export function defaultMapRegexConfig (): MapRegexConfig {
-  return {
-    excludeDeadly: true,
-    excludeWarning: true,
-    requireGood: false,
-    minQuantity: null,
-    minRarity: null,
-    minPackSize: null,
-    minQuality: null,
-    extraTerms: ''
-  }
-}
 
 export type TokenKind = 'plain' | 'anchored' | 'ambiguous'
 
@@ -370,7 +349,7 @@ function generateWith (
   const wanted = new Map<string, string>()
   for (const stat of selectedStats) {
     if (!decisionHasColor(stat.decision, profile)) continue
-    const decision = stat.decision[profile - 1]
+    const decision = decisionAt(stat.decision, profile)
     const isWanted =
       (decision === 'd' && config.excludeDeadly) ||
       (decision === 'w' && config.excludeWarning) ||

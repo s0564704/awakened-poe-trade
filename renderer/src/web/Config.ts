@@ -7,7 +7,7 @@ import type { StashSearchWidget } from './stash-search/widget'
 import type { ItemCheckWidget } from './item-check/widget'
 import type { ItemSearchWidget } from './item-search/widget'
 import { registry as widgetRegistry } from './overlay/widget-registry.js'
-import { defaultMapRegexConfig } from './map-check/map-regex.js'
+import { defaultMapRegexConfig, defaultProfileName } from './map-check/common.js'
 
 const _config = shallowRef<Config | null>(null)
 let _lastSavedConfig: Config | null = null
@@ -124,7 +124,7 @@ export interface Config {
 }
 
 export const defaultConfig = (): Config => ({
-  configVersion: 19,
+  configVersion: 20,
   overlayKey: 'Shift + Space',
   overlayBackground: 'rgba(129, 139, 149, 0.15)',
   overlayBackgroundClose: true,
@@ -439,6 +439,28 @@ function upgradeConfig (_config: Config): Config {
     itemCheck.maps.regex ??= defaultMapRegexConfig()
 
     config.configVersion = 19
+  }
+
+  if (config.configVersion < 20) {
+    const itemCheck = config.widgets.find(w => w.wmType === 'item-check')!
+    // The three fixed profiles become the first three named ones, each keeping
+    // a copy of what used to be a single shared search config.
+    itemCheck.maps.profiles = [0, 1, 2].map((idx: number) => ({
+      name: defaultProfileName(idx),
+      regex: { ...itemCheck.maps.regex }
+    }))
+    delete itemCheck.maps.regex
+    itemCheck.maps.regexExpanded = true
+
+    // Decisions are no longer padded to a fixed width.
+    itemCheck.maps.selectedStats = itemCheck.maps.selectedStats
+      .map((stat: { matcher: string, decision: string }) => ({
+        ...stat,
+        decision: stat.decision.replace(/-+$/, '')
+      }))
+      .filter((stat: { decision: string }) => stat.decision.length)
+
+    config.configVersion = 20
   }
   /* eslint-enable */
 

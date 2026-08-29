@@ -23,7 +23,7 @@
 import { defineComponent, computed, PropType } from 'vue'
 import { useI18n } from 'vue-i18n'
 import UiRadio from '@/web/ui/UiRadio.vue'
-import { StatMatcher, StatTag, decisionHasColor, decisionCreate, MapCheckStat } from './common.js'
+import { StatMatcher, StatTag, decisionAt, decisionHasColor, setDecision, MapCheckStat } from './common.js'
 
 export default defineComponent({
   emits: [],
@@ -51,24 +51,17 @@ export default defineComponent({
     const decision = computed<string>({
       get () {
         if (!entry.value) return '-'
-        return entry.value.decision[props.profile - 1]
+        return decisionAt(entry.value.decision, props.profile)
       },
       set (value) {
-        const newSet = decisionCreate(value, props.profile, entry.value?.decision)
-        if (!entry.value) {
-          props.selectedStats.push({
-            matcher: props.matcher.matchStr,
-            decision: newSet
-          })
-        } else {
-          entry.value.decision = newSet
-        }
+        setDecision(
+          props.selectedStats, props.matcher.matchStr, props.profile, value)
       }
     })
 
     function remove () {
       if (entry.value) {
-        decision.value = '---'
+        decision.value = '-'
       }
     }
 
@@ -77,7 +70,7 @@ export default defineComponent({
       entry,
       decision,
       removable () {
-        return decisionHasColor(entry.value?.decision ?? '---', props.profile)
+        return decisionHasColor(entry.value?.decision ?? '', props.profile)
       },
       remove,
       StatTag

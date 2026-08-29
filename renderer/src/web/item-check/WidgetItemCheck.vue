@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { defaultMapRegexConfig } from '../map-check/map-regex.js'
+import { defaultMapRegexConfig, defaultProfileName } from '../map-check/common.js'
 import type { WidgetSpec } from '../overlay/interfaces'
 import type { ItemCheckWidget } from './widget.js'
 
@@ -33,14 +33,18 @@ export default {
         stashSearchKey: null,
         maps: {
           profile: 1,
+          profiles: [0, 1, 2].map(idx => ({
+            name: defaultProfileName(idx),
+            regex: defaultMapRegexConfig()
+          })),
           showNewStats: false,
+          regexExpanded: true,
           selectedStats: [
-            { matcher: 'Players have #% to all maximum Resistances', decision: 'w--' },
-            { matcher: 'Monsters reflect #% of Physical Damage', decision: 'd--' },
-            { matcher: 'Monsters reflect #% of Elemental Damage', decision: 'd--' },
-            { matcher: 'Area contains two Unique Bosses', decision: 'g--' }
-          ],
-          regex: defaultMapRegexConfig()
+            { matcher: 'Players have #% to all maximum Resistances', decision: 'w' },
+            { matcher: 'Monsters reflect #% of Physical Damage', decision: 'd' },
+            { matcher: 'Monsters reflect #% of Elemental Damage', decision: 'd' },
+            { matcher: 'Area contains two Unique Bosses', decision: 'g' }
+          ]
         }
       }
     }

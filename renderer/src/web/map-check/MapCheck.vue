@@ -4,13 +4,14 @@
     <div class="bg-gray-900 py-1 px-8 flex items-baseline gap-2">
       <div class="flex-1 text-center">{{ mapName }}</div>
       <div class="ml-8 text-gray-400">{{ t('map_check.profile') }}</div>
-      <div class="flex gap-0.5">
+      <div class="flex flex-wrap justify-end gap-0.5">
         <button
-          v-for="profile in profiles" :key="profile.text"
-          @click="profile.select"
-          :class="{ 'border border-gray-600': profile.active }"
-          class="w-6 bg-gray-800"
-        >{{ profile.text }}</button>
+          v-for="(profile, idx) in config.profiles" :key="idx"
+          @click="config.profile = idx + 1"
+          :class="{ 'border border-gray-600': config.profile === idx + 1 }"
+          class="px-1 bg-gray-800 truncate"
+          style="min-width: 1.5rem; max-width: 7rem;"
+        >{{ profile.name }}</button>
       </div>
     </div>
     <FullscreenImage v-if="image" :src="image" style="height: auto;" />
@@ -60,13 +61,4 @@ const image = computed(() =>
     : props.item.info.area?.screenshot)
 
 const mapStats = computed(() => prepareMapStats(props.item))
-
-const profiles = computed(() => {
-  const ROMAN_NUMERALS = ['I', 'II', 'III']
-  return ROMAN_NUMERALS.map((text, i) => ({
-    text,
-    active: (props.config.profile === i + 1),
-    select: () => { props.config.profile = i + 1 }
-  }))
-})
 </script>

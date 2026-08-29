@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import { computed, useCssModule } from 'vue'
 import { PreparedStat } from './prepare-map-stats'
-import { nextDecision, decisionCreate, type MapCheckConfig } from './common.js'
+import { nextDecision, decisionAt, setDecision, type MapCheckConfig } from './common.js'
 
 import ItemModifierText from '../ui/ItemModifierText.vue'
 
@@ -32,18 +32,11 @@ const entry = computed(() => props.config.selectedStats
 const decision = computed<string>({
   get () {
     if (!entry.value) return '-'
-    return entry.value.decision[props.config.profile - 1]
+    return decisionAt(entry.value.decision, props.config.profile)
   },
   set (value) {
-    const newSet = decisionCreate(value, props.config.profile, entry.value?.decision)
-    if (!entry.value) {
-      props.config.selectedStats.push({
-        matcher: props.stat.matcher,
-        decision: newSet
-      })
-    } else {
-      entry.value.decision = newSet
-    }
+    setDecision(
+      props.config.selectedStats, props.stat.matcher, props.config.profile, value)
   }
 })
 
