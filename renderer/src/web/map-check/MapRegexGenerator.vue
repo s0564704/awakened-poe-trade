@@ -75,11 +75,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useI18nNs } from '@/web/i18n'
-import { MainProcess } from '@/web/background/IPC'
 import { configModelValue } from '../settings/utils'
 import { generateMapRegex, SEARCH_LENGTH_LIMIT } from './map-regex.js'
+import { useRegexActions } from './regex-actions.js'
 import { activeProfile, type MapCheckConfig } from './common.js'
 
 import UiCheckbox from '@/web/ui/UiCheckbox.vue'
@@ -135,24 +135,5 @@ function iconOf (decision: string) {
   return 'fas fa-check text-green-500'
 }
 
-const copied = ref(false)
-let clearCopied: ReturnType<typeof setTimeout> | undefined
-
-async function copy () {
-  try {
-    await navigator.clipboard.writeText(generated.value.text)
-    copied.value = true
-    clearTimeout(clearCopied)
-    clearCopied = setTimeout(() => { copied.value = false }, 2000)
-  } catch {
-    // The overlay may not hold focus; the button below still works.
-  }
-}
-
-function searchStash () {
-  MainProcess.sendEvent({
-    name: 'CLIENT->MAIN::user-action',
-    payload: { action: 'stash-search', text: generated.value.text }
-  })
-}
+const { copied, copy, searchStash } = useRegexActions(() => generated.value.text)
 </script>

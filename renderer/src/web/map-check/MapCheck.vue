@@ -14,6 +14,7 @@
         >{{ profile.name }}</button>
       </div>
     </div>
+    <MapRegexBar :maps="config" />
     <FullscreenImage v-if="image" :src="image" style="height: auto;" />
     <div v-if="!mapStats.length" class="px-8 py-2">
       {{ t('map_check.no_mods') }}
@@ -38,6 +39,7 @@ import { prepareMapStats } from './prepare-map-stats'
 import { type MapCheckConfig, isOutdated } from './common.js'
 
 import MapStatButton from './MapStatButton.vue'
+import MapRegexBar from './MapRegexBar.vue'
 import FullscreenImage from '@/web/ui/FullscreenImage.vue'
 
 const props = defineProps<{
