@@ -42,7 +42,8 @@
   "item": {
     "not_group": "None of",
     "count_one_group": "One of",
-    "prop_quality": "Q {0}%",
+    "disenchanting": "Disenchanting",
+    "prop_quality": "(Quality: {0}%)",
     "base_percentile": "Base Percentile: {0}%",
     "armour": "Armour: {0}",
     "evasion_rating": "Evasion Rating: {0}",
@@ -288,6 +289,7 @@
     "name": "Map check",
     "has_outdated": "Wording of some stats has been changed. Check and update dangerous map mods in the settings. (This message will be hidden as soon as you remove all outdated stats)",
     "no_mods": "Item has no modifiers.",
+    "maven_reminder": "Contains the Boss required for\nMaven's Invitation",
     "profile": "Profile",
     "profile_name": "Name",
     "profile_add": "Add profile",
@@ -383,6 +385,7 @@
     "auto_search": "Perform an auto search, when pressing",
     "select_stock": "Always select \"Stock\" filter",
     "show_prediction": "Show price prediction",
-    "remember_currency": "Remember the Buyout Currency filter"
+    "remember_currency": "Remember the Buyout Currency filter",
+    "default_settings": "Search by default with the following settings:"
   }
 }
