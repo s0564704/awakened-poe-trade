@@ -299,11 +299,15 @@ export function atLeastPattern (min: number, maxDigits = 3): string {
 }
 
 export function thresholdTerm (label: string, min: number, avoid: string[]): string {
-  return `"${shortestLabel(label, avoid)}\\+?${atLeastPattern(min)}"`
+  return quote(`${shortestLabel(label, avoid)}\\+?${atLeastPattern(min)}`)
 }
 
 function quote (text: string): string {
   return `"${text}"`
+}
+
+function parenthesize (text: string): string {
+  return `(${text})`
 }
 
 function assemble (
@@ -314,13 +318,13 @@ function assemble (
 ): string {
   const terms = [...thresholds]
   if (excluded.length) {
-    terms.push(`!${quote(excluded.map(t => t.token).join('|'))}`)
+    terms.push(quote(`!${parenthesize(excluded.map(t => t.token).join('|'))}`))
   }
   for (const token of required) {
     terms.push(quote(token.token))
   }
   const extra = extraTerms.trim()
-  if (extra) terms.push(extra)
+  if (extra) terms.push(quote(extra))
   return terms.join(' ')
 }
 
