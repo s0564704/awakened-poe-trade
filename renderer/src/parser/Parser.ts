@@ -172,6 +172,25 @@ function normalizeName (item: ParserState) {
   }
 }
 
+// The data pipeline emits the generic "Blighted Map" and "Blight-ravaged Map"
+// bases without the `craftable` and `area` fields that the plain "Map" base
+// carries. With no `craftable.category` the item ends up uncategorised, so
+// `parseMap` skips it, WidgetItemCheck renders ItemInfo instead of MapCheck,
+// and `mapBlighted` never reaches the trade query. Patched here rather than in
+// items.ndjson so it survives the next `update data` drop; fixing the data would
+// also mean re-running `make-index-files` for all four languages, since the .bin
+// indices store byte offsets into the ndjson.
+function restoreBlightedMapBase (info: BaseType): BaseType {
+  if (info.refName !== 'Blighted Map' && info.refName !== 'Blight-ravaged Map') {
+    return info
+  }
+  return {
+    ...info,
+    craftable: info.craftable ?? { category: ItemCategory.Map },
+    area: { ...info.area, blighted: true }
+  }
+}
+
 function findInDatabase (item: ParserState) {
   let info: BaseType[] | undefined
   if (item.category === ItemCategory.DivinationCard) {
@@ -199,6 +218,7 @@ function findInDatabase (item: ParserState) {
     const baseTypeRef = baseTypes[0].refName
     info = info.filter(info => info.unique!.base === baseTypeRef)
   }
+  info = info.map(restoreBlightedMapBase)
   item.infoVariants = info
   // choose 1st variant, correct one will be picked at the end of parsing
   item.info = info[0]
